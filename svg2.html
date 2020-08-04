@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>SVG Study for Sugarizer</title>
+    <link href="xocolor.css" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover"/>
+    <link rel="stylesheet" href="sugar-96dpi.css">
+    <style>
+    *:focus {
+        outline: 0;
+    }
+    #abacus-button {
+      background-image: url(./abacus-list.svg);
+    }
+    #abcd-button {
+      background-image: url(./abcd-init.svg);
+    }
+    #favorite-button {
+      background-image: url(./emblem-favorite.svg);
+    }
+    </style>
+</head>
+
+<body id="body">
+
+
+    <div id="main-toolbar" class="toolbar">
+        <button class="toolbutton" id="activity-button" title="Activity button"></button>
+        <button class="toolbutton" id="abcd-button" title="Old Activity button"></button>
+        <button class="toolbutton" id="abacus-button" title="Old Activity button"></button>
+        <button class="toolbutton" id="favorite-button" title="Old Favorite button"></button>
+        <button class="toolbutton" id="fav-button" title="Favorite button"></button>
+    </div>
+
+    <h1>SVG Study for Sugarizer</h1>
+
+    <input type="button" value="Prev" onclick="previousColor()"/>
+    <input type="button" value="Next" onclick="nextColor()"/>
+
+    <hr/>
+    <script type="text/javascript">
+        function createIcon(svgfile, xocolor, size, intresecSize) {
+            var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svgElement.setAttribute("class", "xo-color"+xocolor);
+            if (size) {
+                svgElement.setAttribute("width", size+"px");
+                svgElement.setAttribute("height", size+"px");
+                svgElement.setAttribute("style", "margin: -2px -4px");
+                svgElement.setAttribute("preserveAspectRatio", "xMidYMid meet");
+                if (intresecSize) {
+                    svgElement.setAttribute("viewBox", "0 0 "+intresecSize+" "+intresecSize);
+                }
+                else {
+                    svgElement.setAttribute("viewBox", "0 0 55 55");
+                }
+            }
+            var useElement = document.createElementNS(svgElement.namespaceURI,"use");
+            var xref = svgfile+"#icon";
+            useElement.setAttribute("xlink:href",xref);
+            useElement.setAttribute("href",xref);
+            svgElement.appendChild(useElement);
+            return svgElement;
+        }
+
+        var index = 7;
+        var abcd = createIcon("abcd.svg",index,47);
+        document.body.appendChild(abcd);
+        document.body.appendChild(createIcon("owner.svg",120,300,100));
+        document.body.appendChild(createIcon("write.svg",66,100));
+        function previousColor() {
+            if (--index==-1) { index=179; }
+            abcd.setAttribute("class", "xo-color"+index);
+        }
+        function nextColor() {
+            if (++index==180) { index=0; }
+            abcd.setAttribute("class", "xo-color"+index);
+        }
+
+        document.getElementById("activity-button").appendChild(createIcon("abcd.svg",98,47));
+        document.getElementById("fav-button").appendChild(createIcon("new-favorite.svg",121,47));
+    </script>
+</body>
+
+</html>
