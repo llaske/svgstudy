@@ -40,8 +40,14 @@
     <input type="button" value="Next" onclick="nextColor()"/>
 
     <hr/>
+    <div id="abcd"/>
+    <div id="owner"/>
+    <div id="write"/>
     <script type="text/javascript">
-        function createIcon(svgfile, xocolor, size, intresecSize) {
+        function createIcon(parent,svgfile, xocolor, size, intresecSize) {
+            if (!parent) {
+                return null;
+            }
             var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             svgElement.setAttribute("class", "xo-color"+xocolor);
             if (size) {
@@ -61,25 +67,79 @@
             useElement.setAttribute("xlink:href",xref);
             useElement.setAttribute("href",xref);
             svgElement.appendChild(useElement);
+            parent.appendChild(svgElement);
             return svgElement;
         }
 
-        var index = 7;
-        var abcd = createIcon("abcd.svg",index,47);
-        document.body.appendChild(abcd);
-        document.body.appendChild(createIcon("owner.svg",120,300,100));
-        document.body.appendChild(createIcon("write.svg",66,100));
-        function previousColor() {
-            if (--index==-1) { index=179; }
-            abcd.setAttribute("class", "xo-color"+index);
-        }
-        function nextColor() {
-            if (++index==180) { index=0; }
-            abcd.setAttribute("class", "xo-color"+index);
+        function getIconColor(icon) {
+            if (!icon) {
+                return -1;
+            }
+            var element = null;
+            for (var i = 0 ; i < icon.children.length && !element ; i++) {
+                if (icon.children[i].tagName == "svg") {
+                    element = icon.children[i];
+                }
+            }
+            if (element == null) {
+                return -1;
+            }
+            var xocolor = element.getAttribute("class");
+            var index;
+            if (!xocolor || (index = xocolor.indexOf("xo-color")) == -1) {
+                return -1;
+            }
+            return parseInt(xocolor.substr(index+8));
         }
 
-        document.getElementById("activity-button").appendChild(createIcon("abcd.svg",98,47));
-        document.getElementById("fav-button").appendChild(createIcon("new-favorite.svg",121,47));
+        function setIconColor(icon,color) {
+            if (!icon) {
+                return -1;
+            }
+            var element = null;
+            for (var i = 0 ; i < icon.children.length && !element ; i++) {
+                if (icon.children[i].tagName == "svg") {
+                    element = icon.children[i];
+                }
+            }
+            if (element == null) {
+                return -1;
+            }
+            element.setAttribute("class", "xo-color"+color);;
+        }
+
+        function decreaseColor(icon) {
+            var index = getIconColor(icon);
+            if (--index==-1) { index=179; }
+            setIconColor(icon, index);
+        }
+
+        function increaseColor(icon) {
+            var index = getIconColor(icon);
+            if (++index==180) { index=0; }
+            setIconColor(icon, index);
+        }
+
+        createIcon(document.getElementById("abcd"),"abcd.svg",7,47);
+        createIcon(document.getElementById("owner"),"owner.svg",120,300,100);
+        createIcon(document.getElementById("write"),"write.svg",66,100);
+        function previousColor() {
+            decreaseColor(document.getElementById("abcd"));
+            decreaseColor(document.getElementById("owner"));
+            decreaseColor(document.getElementById("write"));
+            decreaseColor(document.getElementById("activity-button"));
+            decreaseColor(document.getElementById("fav-button"));
+        }
+        function nextColor() {
+            increaseColor(document.getElementById("abcd"));
+            increaseColor(document.getElementById("owner"));
+            increaseColor(document.getElementById("write"));
+            increaseColor(document.getElementById("activity-button"));
+            increaseColor(document.getElementById("fav-button"));
+        }
+
+        createIcon(document.getElementById("activity-button"),"abcd.svg",98,47);
+        createIcon(document.getElementById("fav-button"),"new-favorite.svg",121,47);
     </script>
 </body>
 
