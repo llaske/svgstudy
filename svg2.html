@@ -40,9 +40,14 @@
     <input type="button" value="Next" onclick="nextColor()"/>
 
     <hr/>
-    <div id="abcd"/>
-    <div id="owner"/>
-    <div id="write"/>
+    <div id="abcd"></div>
+    <div id="owner"></div>
+    <div id="write"></div>
+    <hr/>
+    <button>
+        <div id="buddy" style="display:inline-block;padding:6px 3px 4px 3px;width:20px;height:20px;"></div>
+        <span style="display:inline-block;vertical-align:text-bottom;padding-right:6px;">Text button</span>
+    </button>
     <script type="text/javascript">
         function createIcon(parent,svgfile, xocolor, size, intresecSize) {
             if (!parent) {
@@ -124,6 +129,7 @@
         createIcon(document.getElementById("owner"),"owner.svg",120,300,100);
         createIcon(document.getElementById("write"),"write.svg",66,100);
         function previousColor() {
+            decreaseColor(document.getElementById("buddy"));
             decreaseColor(document.getElementById("abcd"));
             decreaseColor(document.getElementById("owner"));
             decreaseColor(document.getElementById("write"));
@@ -131,6 +137,7 @@
             decreaseColor(document.getElementById("fav-button"));
         }
         function nextColor() {
+            increaseColor(document.getElementById("buddy"));
             increaseColor(document.getElementById("abcd"));
             increaseColor(document.getElementById("owner"));
             increaseColor(document.getElementById("write"));
@@ -140,6 +147,8 @@
 
         createIcon(document.getElementById("activity-button"),"abcd.svg",98,47);
         createIcon(document.getElementById("fav-button"),"new-favorite.svg",121,47);
+
+        createIcon(document.getElementById("buddy"),"owner.svg",31,20,100);
     </script>
 </body>
 
