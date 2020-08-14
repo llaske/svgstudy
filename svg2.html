@@ -48,6 +48,10 @@
         <div id="buddy" style="display:inline-block;padding:6px 3px 4px 3px;width:20px;height:20px;"></div>
         <span style="display:inline-block;vertical-align:text-bottom;padding-right:6px;">Text button</span>
     </button>
+    <div id="abcd-error"></div>
+    <div id="abcd-error2"></div>
+    <hr/>
+
     <script type="text/javascript">
         function createIcon(parent,svgfile, xocolor, size, intresecSize) {
             if (!parent) {
@@ -68,9 +72,12 @@
                 }
             }
             var useElement = document.createElementNS(svgElement.namespaceURI,"use");
+            useElement.addEventListener('load', function() { console.log(svgfile+' loaded'); })
+            useElement.addEventListener('error', function() { console.log(svgfile+' error'); }) // Error loading SVG file
             var xref = svgfile+"#icon";
             useElement.setAttribute("xlink:href",xref);
             useElement.setAttribute("href",xref);
+            // Detection of error no symbol #icon is not possible due to closed ShadowDOM
             svgElement.appendChild(useElement);
             parent.appendChild(svgElement);
             return svgElement;
@@ -78,7 +85,7 @@
 
         function getIconColor(icon) {
             if (!icon) {
-                return -1;
+                return -1; // Error bad element
             }
             var element = null;
             for (var i = 0 ; i < icon.children.length && !element ; i++) {
@@ -87,19 +94,19 @@
                 }
             }
             if (element == null) {
-                return -1;
+                return -1; // Error no SVG included
             }
             var xocolor = element.getAttribute("class");
             var index;
             if (!xocolor || (index = xocolor.indexOf("xo-color")) == -1) {
-                return -1;
+                return -1; // Error no XO color
             }
             return parseInt(xocolor.substr(index+8));
         }
 
         function setIconColor(icon,color) {
             if (!icon) {
-                return -1;
+                return -1; // Error bad element
             }
             var element = null;
             for (var i = 0 ; i < icon.children.length && !element ; i++) {
@@ -108,7 +115,7 @@
                 }
             }
             if (element == null) {
-                return -1;
+                return -1; // Error no SVG included
             }
             element.setAttribute("class", "xo-color"+color);;
         }
@@ -128,6 +135,9 @@
         createIcon(document.getElementById("abcd"),"abcd.svg",7,47);
         createIcon(document.getElementById("owner"),"owner.svg",120,300,100);
         createIcon(document.getElementById("write"),"write.svg",66,100);
+        createIcon(document.getElementById("abcd-error"),"abcd-error.svg",7,47);
+        createIcon(document.getElementById("abcd-error2"),"abcd-error2.svg",7,47);
+
         function previousColor() {
             decreaseColor(document.getElementById("buddy"));
             decreaseColor(document.getElementById("abcd"));
