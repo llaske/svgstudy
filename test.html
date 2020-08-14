@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>SVG Test</title>
+    <title>SVG Integration Test</title>
     <style>
     .icon {
         width: 100px;
@@ -48,7 +48,7 @@
 
 <body id="body">
 
-    <!-- Buddy icon -->
+    <!-- Buddy icon integrated in HTML -->
     <svg
        style="display:none"
        xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -136,7 +136,7 @@
       </symbol>
     </svg>
 
-    <!-- Abecedarium icon -->
+    <!-- Abecedarium icon integrated in HTML -->
     <svg
        style="display:none"
        xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -333,7 +333,7 @@
       </symbol>
     </svg>
 
-    <h1>Hello SVG</h1>
+    <h1>SVG Integration Test</h1>
 
     <!-- Integrate inline -->
     <svg class="icon icon-blue">
@@ -349,22 +349,22 @@
 
     <!-- Integrate external -->
     <svg class="icon-green">
-        <use xlink:href="abcd-icon.svg#abcd2" />
+        <use xlink:href="icons/new/abcd.svg#abcd2" />
     </svg>
     <svg class="icon-yellow">
-        <use xlink:href="abcd-icon2.svg#abcd3" />
+        <use xlink:href="icons/new/abcd-icon2.svg#abcd3" />
     </svg>
-    <embed src="abcd-icon4.svg"/>
-    <div style="background-image:url('abcd-icon4.svg');background-size: 55px 55px;height:100px;width:100px"></div>
+    <embed src="icons/new/abcd-icon4.svg"/>
+    <div style="background-image:url('icons/new/abcd-icon4.svg');background-size: 55px 55px;height:100px;width:100px"></div>
     <hr/>
 
-    <!-- Integrate external -->
+    <!-- Integrate external dynamically -->
     <script type="text/javascript">
         var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svgElement.setAttribute("class", "icon-yellow");
         var useElement = document.createElementNS(svgElement.namespaceURI,"use");
-        useElement.setAttribute("xlink:href","abcd-icon2.svg#abcd3");
-        useElement.setAttribute("href","abcd-icon2.svg#abcd3");
+        useElement.setAttribute("xlink:href","icons/new/abcd-icon2.svg#abcd3");
+        useElement.setAttribute("href","icons/new/abcd-icon2.svg#abcd3");
         svgElement.appendChild(useElement);
         document.body.appendChild(svgElement);
     </script>

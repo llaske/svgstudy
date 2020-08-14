@@ -3,22 +3,22 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>SVG Study for Sugarizer</title>
-    <link href="xocolor.css" rel="stylesheet" type="text/css" />
+    <title>SVG Study for Sugarizer v2</title>
+    <link href="css/xocolor.css" rel="stylesheet" type="text/css" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover"/>
-    <link rel="stylesheet" href="sugar-96dpi.css">
+    <link rel="stylesheet" href="css/sugar-96dpi.css">
     <style>
     *:focus {
         outline: 0;
     }
     #abacus-button {
-      background-image: url(./abacus-list.svg);
+      background-image: url(./icons/raw/abacus-list.svg);
     }
     #abcd-button {
-      background-image: url(./abcd-init.svg);
+      background-image: url(./icons/old/abcd-init.svg);
     }
     #favorite-button {
-      background-image: url(./emblem-favorite.svg);
+      background-image: url(./icons/old/emblem-favorite.svg);
     }
     </style>
 </head>
@@ -34,10 +34,10 @@
         <button class="toolbutton" id="fav-button" title="Favorite button"></button>
     </div>
 
-    <h1>SVG Study for Sugarizer</h1>
+    <h1>SVG Study for Sugarizer v2</h1>
 
-    <input type="button" value="Prev" onclick="previousColor()"/>
-    <input type="button" value="Next" onclick="nextColor()"/>
+    <input type="button" value="Prev Color" onclick="previousColor()"/>
+    <input type="button" value="Next Color" onclick="nextColor()"/>
 
     <hr/>
     <div id="abcd"></div>
@@ -132,11 +132,11 @@
             setIconColor(icon, index);
         }
 
-        createIcon(document.getElementById("abcd"),"abcd.svg",7,47);
-        createIcon(document.getElementById("owner"),"owner.svg",120,300,100);
-        createIcon(document.getElementById("write"),"write.svg",66,100);
-        createIcon(document.getElementById("abcd-error"),"abcd-error.svg",7,47);
-        createIcon(document.getElementById("abcd-error2"),"abcd-error2.svg",7,47);
+        createIcon(document.getElementById("abcd"),"icons/new/abcd.svg",7,47);
+        createIcon(document.getElementById("owner"),"icons/new/owner.svg",120,300,100);
+        createIcon(document.getElementById("write"),"icons/new/write.svg",66,100);
+        createIcon(document.getElementById("abcd-error"),"icons/new/abcd-error.svg",7,47);
+        createIcon(document.getElementById("abcd-error2"),"icons/new/abcd-error2.svg",7,47);
 
         function previousColor() {
             decreaseColor(document.getElementById("buddy"));
@@ -155,10 +155,10 @@
             increaseColor(document.getElementById("fav-button"));
         }
 
-        createIcon(document.getElementById("activity-button"),"abcd.svg",98,47);
-        createIcon(document.getElementById("fav-button"),"new-favorite.svg",121,47);
+        createIcon(document.getElementById("activity-button"),"icons/new/abcd.svg",98,47);
+        createIcon(document.getElementById("fav-button"),"icons/new/new-favorite.svg",121,47);
 
-        createIcon(document.getElementById("buddy"),"owner.svg",31,20,100);
+        createIcon(document.getElementById("buddy"),"icons/new/owner.svg",31,20,100);
     </script>
 </body>
 
