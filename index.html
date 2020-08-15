@@ -21,6 +21,7 @@
       background-image: url(./icons/old/emblem-favorite.svg);
     }
     </style>
+    <script src="lib/xocolor.js" type="text/javascript"></script>
 </head>
 
 <body id="body">
@@ -44,7 +45,7 @@
     <div id="owner"></div>
     <div id="write"></div>
     <hr/>
-    <button>
+    <button onclick="colorize()">
         <div id="buddy" style="display:inline-block;padding:6px 3px 4px 3px;width:20px;height:20px;"></div>
         <span style="display:inline-block;vertical-align:text-bottom;padding-right:6px;">Text button</span>
     </button>
@@ -53,7 +54,7 @@
     <hr/>
 
     <script type="text/javascript">
-        function createIcon(parent,svgfile, xocolor, size, intresecSize) {
+        function createIcon(parent, svgfile, xocolor, size, intresecSize, callback) {
             if (!parent) {
                 return null;
             }
@@ -72,15 +73,23 @@
                 }
             }
             var useElement = document.createElementNS(svgElement.namespaceURI,"use");
-            useElement.addEventListener('load', function() { console.log(svgfile+' loaded'); })
-            useElement.addEventListener('error', function() { console.log(svgfile+' error'); }) // Error loading SVG file
+            useElement.addEventListener('load', function() {
+                if (callback) {
+                    callback(svgElement);
+                }
+            })
+            useElement.addEventListener('error', function() {
+                console.log(svgfile+' error');
+                if (callback) {
+                    callback(null);
+                }
+            }) // Error loading SVG file
             var xref = svgfile+"#icon";
             useElement.setAttribute("xlink:href",xref);
             useElement.setAttribute("href",xref);
             // Detection of error no symbol #icon is not possible due to closed ShadowDOM
             svgElement.appendChild(useElement);
             parent.appendChild(svgElement);
-            return svgElement;
         }
 
         function getIconColor(icon) {
@@ -117,7 +126,30 @@
             if (element == null) {
                 return -1; // Error no SVG included
             }
-            element.setAttribute("class", "xo-color"+color);;
+            element.setAttribute("class", "xo-color"+color);
+            return 0;
+        }
+
+        // Should be compatible with icon.colorize method in Sugar Web
+        function icon_colorize(elem, colors, callback) {
+            var index = -1;
+            var stroke = (colors.stroke||'').toUpperCase();
+            var fill = (colors.fill||'').toUpperCase();
+            for (var i = 0 ; i < xocolor.colors.length && index == -1 ; i++) {
+                if (xocolor.colors[i].stroke == stroke && xocolor.colors[i].fill == fill) {
+                    index = i;
+                }
+            }
+            if (index == -1) {
+                if (callback) {
+                    callback(null);
+                }
+                return;
+            }
+            var rc = (setIconColor(elem, index)==-1?null:true);
+            if (callback) {
+                callback(rc);
+            }
         }
 
         function decreaseColor(icon) {
@@ -130,6 +162,17 @@
             var index = getIconColor(icon);
             if (++index==180) { index=0; }
             setIconColor(icon, index);
+        }
+
+        function colorize() {
+            // Call icon colorize with a right value
+            icon_colorize(document.getElementById("buddy"), {stroke: '#b20008',fill: '#f8e800'}, function(res) {
+                console.log(res);
+            })
+            // Call icon colorize with a wrong value
+            icon_colorize(document.getElementById("buddy"), {fill: '#ff0000'}, function(res) {
+                console.log(res);
+            })
         }
 
         createIcon(document.getElementById("abcd"),"icons/new/abcd.svg",7,47);
