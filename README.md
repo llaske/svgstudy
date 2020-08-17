@@ -1,10 +1,12 @@
 # SVG Study for Sugarizer v2
 
-The basic idea of this study is to find a way to simplify handling of coloured SVG file in Sugarizer.
+The idea of this study is to simplify handling of coloured SVG file in Sugarizer.
+
+![](images/svgstudy.png)
 
 ## How coloured SVG file works in Sugarizer v1
 
-Currently to be able to color a SVG file in Sugarizer:
+The current SVG coloured system in Sugarizer v1 is inherited from Sugar. The format used is described [here](https://wiki.sugarlabs.org/go/Development_Team/Almanac/Making_Icons). With this mechanism, to be able to color a SVG file in Sugarizer:
 
 - The SVG file must include a specific `DOCTYPE` header. This header is used to declare `stroke_color` and `fill_color` attribute as XML Entity. For example:
 
@@ -37,7 +39,7 @@ Currently to be able to color a SVG file in Sugarizer:
 }
 ```
 
-- The function `colorize(elem,colors,callback)` in `sugar-web\graphics\icon` module must be call to change SVG color. This function:
+- The function `colorize(elem,colors,callback)` in `sugar-web/graphics/icon` module must be call to change SVG color. This function:
 
     * Load the background SVG file of the `elem` element by using a `XMLHttpRequest` call
     * Replace values of `<!ENTITY stroke_color ...>` and `<!ENTITY fill_color ...>` in the header of the file by parameter values `colors.stroke` and `colors.fill`
@@ -58,17 +60,17 @@ xmlns%3Adc%3D%22http%3A//purl.org/dc/elements/1.1/%22%0A%20%20%20xmlns%3Acc%3D%2
 
 The current system works but have several drawbacks:
 
-* The SVG file should be updated manually: no editor support the add of a new section and using of attributes as XML Entity
-* The SVG file should be reloaded each time it should be recolored. It means that each icon in the UI is load - at least - one time without color and one other time to change its colors
-* Using of `XmlHttpRequest` call on `file:///` is forbidden by default in recent browsers
+* The SVG file should be reloaded each time it need to be recolored. It means that each icon in the UI is load - at least - one time without color and another time to change its colors
 * Using of `XmlHttpRequest` call prevent browser caching
 * Using encoded DATA image as background has performance issue
+* Using of `XmlHttpRequest` call on `file:///` is forbidden by default in recent browsers
+* The SVG file should be updated manually: no editor support the add of a new section and using of attributes as XML Entity
 
 ## Handling SVG files in Sugarizer v2
 
 The idea in Sugarizer v2 is to handle SVG files using only native SVG features, specifically: [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/--*), [CSS in SVG](http://tutorials.jenkov.com/svg/svg-and-css.html) and [SVG external source](https://css-tricks.com/svg-use-with-external-reference-take-2/).
 
-* CSS variables is a way to define custom CSS properties that you could add to standard CSS properties. In Sugarizer v2 we will define two new custom properties `--stroke-color` and `--fill-color`. These properties will be use to match stroke color and fill color to use in the SVG. We will add also define a list of CSS class to match all possible XO buddy colors. Something like:
+* CSS variables is a way to define custom CSS properties that you could add to standard CSS properties. In Sugarizer v2 we will define two new custom properties `--stroke-color` and `--fill-color`. These properties will be use to match stroke color and fill color to use in the SVG. We will also define a list of CSS class to match all possible XO buddy colors. Something like:
 
 ```
 .xo-color0 { --stroke-color: #B20008; --fill-color: #FF2B34; }
@@ -122,7 +124,7 @@ For Sugarizer v2, we will dynamically generate the new SVG element with a bunch 
    document.body.appendChild(svgElement);
 ``` 
 
-Note that using SVG external source require to reference a `symbol` in the external file (the `#icon` in exemples before). So the final SVG file will look like to:
+Note that using SVG external source require to reference a `symbol` in the external file (the `#icon` in exemples before). An `use` tag is also added at the end of file to allow the content to be visible in an editor. So the final SVG file will look like to:
 
 ```
 <svg
@@ -141,10 +143,32 @@ Note that using SVG external source require to reference a `symbol` in the exter
    rx="4.22753"
    ry="2.0411496" />
 ...
-</symbol>
+</symbol><use xlink:href="#icon" href="#icon"/>
 </svg>
+```
+
+## Live testing
+
+To test the new feature, this study come with a HTML test page.
+
+This page contains all sort of colorized icon that could be found in Sugarizer: alone, in the toolbar or as button icon.
+Two buttons show how it's possible to dynamically change colors.
+
+You could test it [here](index.html).
+
+
+
+## Migration process
+
+* The new way of handling SVG is not directly compatible with the old one due to the change of structure. The old one need to define a background in the CSS, the new way need to create a child object of the element. So the migration process start by removing the `background-image` style in the CSS and replace it by a call to a `createIcon` method at startup (see code in the test page).
+
+* Because icons are colorized in Sugarizer by calling the `colorize(elem, colors, callback)` method in Sugar-Web `icon` component, it's important to ensure a compatibility with this method. An example of implementation of new Sugarizer v2 icons matching this method is proposed in the HTML test page (see code on the icon button click).
+
+* Finally, SVG files should to be adapted. To simplify the migration from Sugarizer v1 icons to Sugarizer v2 icons, an example of migration tool call `sugarizeicon` is provided with this study. To launch the tool, run:
+
+```
+node sugarizeicon.js old.svg > new.svg
 ```
 
 
 
- 
