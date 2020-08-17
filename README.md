@@ -122,7 +122,7 @@ For Sugarizer v2, we will dynamically generate the new SVG element with a bunch 
    useElement.setAttribute("href",my-icon.svg#icon"); // Need on some browsers
    svgElement.appendChild(useElement);
    document.body.appendChild(svgElement);
-``` 
+```
 
 Note that using SVG external source require to reference a `symbol` in the external file (the `#icon` in exemples before). An `use` tag is also added at the end of file to allow the content to be visible in an editor. So the final SVG file will look like to:
 
@@ -154,7 +154,7 @@ To test the new feature, this study come with a HTML test page.
 This page contains all sort of colorized icon that could be found in Sugarizer: alone, in the toolbar or as button icon.
 Two buttons show how it's possible to dynamically change colors.
 
-You could test it [here](index.html).
+You could test it [here](https://llaske.github.io/svgstudy/).
 
 
 
